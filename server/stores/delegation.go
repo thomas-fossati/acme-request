@@ -122,9 +122,6 @@ func stringToDelegationID(id string) (DelegationID, error) {
 // saveDelegationToStore assumes that the supplied delegation has been already sanitised
 // by sanitizeInDelegation()
 func (us *DelegationStore) saveDelegationToStore(d models.Delegation) (*models.Delegation, error) {
-	// Save the id into the delegation request and add a creation timestamp
-	d.CreationDate = time.Now()
-
 	// Save the delegation request into the sqlite backend
 	sqlQuery := "INSERT INTO delegation(csr, duration, cert_lifetime) VALUES(?, ?, ?)"
 

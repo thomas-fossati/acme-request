@@ -2,6 +2,7 @@ package apis
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"../models"
@@ -20,13 +21,23 @@ type (
 	}
 )
 
+const (
+	DelegationPath = "/star/delegation"      // TODO(tho) move into env
+	VirtualHost    = "http://localhost:3000" // TODO(tho) move into env
+)
+
+func Config(virtualHost string) error {
+
+	return nil
+}
+
 // SetupDelegationRoutes tells the supplied /router/ how to handle the "/delegation" resource(s)
 func SetupDelegationRoutes(router *mux.Router, serviceInterface ServiceInterface) {
 	ur := &delegationResource{serviceInterface}
 
 	// TODO(tho) add DELETE as an acceptable method for "/star/delegation/{id}"
-	router.HandleFunc("/star/delegation/{id}", RequestLogger(ur.readDelegation)).Methods("GET")
-	router.HandleFunc("/star/delegation", RequestLogger(ur.addDelegation)).Methods("POST")
+	router.HandleFunc(DelegationPath, RequestLogger(ur.addDelegation)).Methods("POST")
+	router.HandleFunc(DelegationPath+"/{id}", RequestLogger(ur.readDelegation)).Methods("GET")
 	// Add other delegation API methods here...
 }
 
@@ -53,7 +64,8 @@ func (ur *delegationResource) addDelegation(w http.ResponseWriter, r *http.Reque
 
 	// Send reply
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Etag", models.ComputeETag(out))
+	w.Header().Set("Etag", models.ComputeETag(body))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%s", VirtualHost, DelegationPath, out.ID))
 	w.WriteHeader(http.StatusCreated)
 	w.Write(body)
 
@@ -78,7 +90,7 @@ func (ur *delegationResource) readDelegation(w http.ResponseWriter, r *http.Requ
 
 	// Send reply
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Etag", models.ComputeETag(delegation))
+	w.Header().Set("Etag", models.ComputeETag(body))
 	w.WriteHeader(http.StatusOK)
 	w.Write(body)
 

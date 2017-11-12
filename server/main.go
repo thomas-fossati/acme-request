@@ -11,6 +11,7 @@ func processFlags() *daemon.Config {
 	cfg := &daemon.Config{}
 
 	flag.StringVar(&cfg.ListenSpec, "listen", "localhost:3000", "HTTP listen spec")
+	flag.StringVar(&cfg.VirtualHost, "vhost", "http://localhost:3000", "Virtual host")
 
 	flag.Parse()
 

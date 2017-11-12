@@ -14,7 +14,8 @@ import (
 
 // TODO(tho) add comment
 type Config struct {
-	ListenSpec string
+	ListenSpec  string
+	VirtualHost string
 }
 
 // TODO(tho) add comment
