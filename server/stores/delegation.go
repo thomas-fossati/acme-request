@@ -181,16 +181,16 @@ func (us *DelegationStore) ReadDelegation(id string) (*models.Delegation, error)
 func (us *DelegationStore) getDelegationByID(id DelegationID) (*models.Delegation, error) {
 	sqlQuery := `
 	SELECT id,
-	       certURL,
+		   certURL,
 		   created,  
 		   last_update,
-	       expires,
+		   expires,
 		   completed,
 		   status,
 		   details,
 		   csr,
-	       cert_lifetime,
-	       duration
+		   cert_lifetime,
+		   duration
 	  FROM delegation
 	 WHERE id = ?
 	`
